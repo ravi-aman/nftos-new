@@ -3,7 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/ui/footer";
 import Navbar from "@/components/Navbar";
-
+<link
+  href="https://fonts.googleapis.com/css2?family=Italianno&display=swap"
+  rel="stylesheet"
+/>
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

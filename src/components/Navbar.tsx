@@ -1,22 +1,70 @@
-import Link from "next/link"
-import React from 'react'
-import { Linkedin, LinkedinIcon } from "lucide-react"
+"use client"
+
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import { LinkedinIcon, Menu, X } from "lucide-react";
+import { gsap } from "gsap";
+
 function Navbar() {
+    // Ref for the navbar (for slide-down on load)
+    const navRef = useRef(null);
+    // Ref for the mobile menu panel (for sliding in/out)
+    const mobileMenuRef = useRef(null);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    // Slide down the navbar on load
+    useEffect(() => {
+        if (navRef.current) {
+            gsap.from(navRef.current, {
+                y: -100,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        }
+    }, []);
+
+    // Animate the mobile menu sliding in/out when toggling menuOpen
+    useEffect(() => {
+        if (mobileMenuRef.current) {
+            if (menuOpen) {
+                gsap.to(mobileMenuRef.current, {
+                    x: 0,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            } else {
+                gsap.to(mobileMenuRef.current, {
+                    x: "-100%",
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            }
+        }
+    }, [menuOpen]);
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    };
+
     return (
-        <div>
-            {/* Navigation */}
-            <nav className="border rounded-full px-6 py-4 mx-4 mt-4 flex items-center justify-between">
+        <>
+            {/* Navbar */}
+            <nav
+                ref={navRef}
+                className="fixed top-0 left-0 right-0 z-50 bg-white border rounded-full px-6 py-4 mx-4 mt-4 flex items-center justify-between shadow-sm"
+            >
                 {/* Logo */}
                 <div className="w-12 h-12 bg-black rounded-sm flex items-center justify-center">
                     <span className="text-white font-bold text-xl">T</span>
                 </div>
 
-                {/* Navigation Links */}
+                {/* Desktop Navigation Links */}
                 <div className="hidden md:flex items-center space-x-8">
-                    <Link href="#" className="text-gray-800 hover:text-gray-600">
+                    <Link href="/" className="text-gray-800 hover:text-gray-600">
                         HOME
                     </Link>
-                    <Link href="#" className="text-gray-800 hover:text-gray-600">
+                    <Link href="/about" className="text-gray-800 hover:text-gray-600">
                         WHO WE ARE
                     </Link>
                     <Link href="#" className="text-gray-800 hover:text-gray-600">
@@ -33,13 +81,52 @@ function Navbar() {
                     </Link>
                 </div>
 
-                {/* LinkedIn Icon */}
-                <Link href="#" className="text-blue-600 hover:text-blue-700">
-                    <LinkedinIcon className="w-6 h-6" />
-                </Link>
+                {/* Right Side: LinkedIn icon and Mobile Menu Toggle */}
+                <div className="flex items-center space-x-4">
+                    <Link
+                        href="#"
+                        className="text-blue-600 hover:text-blue-700 hidden md:block"
+                    >
+                        <LinkedinIcon className="w-6 h-6" />
+                    </Link>
+                    {/* Mobile Menu Toggle Button */}
+                    <button className="md:hidden" onClick={toggleMenu}>
+                        {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </button>
+                </div>
             </nav>
-        </div>
-    )
+
+            {/* Mobile Menu Panel */}
+            <div
+                ref={mobileMenuRef}
+                className="fixed top-0 left-0 w-2/3 max-w-xs h-screen bg-white shadow-lg z-50 transform -translate-x-full"
+            >
+                <div className="px-6 py-4 flex flex-col space-y-6 mt-16">
+                    <Link href="/" onClick={() => setMenuOpen(false)} className="text-gray-800 hover:text-gray-600">
+                        HOME
+                    </Link>
+                    <Link href="/about" onClick={() => setMenuOpen(false)} className="text-gray-800 hover:text-gray-600">
+                        WHO WE ARE
+                    </Link>
+                    <Link href="#" onClick={() => setMenuOpen(false)} className="text-gray-800 hover:text-gray-600">
+                        OUR BUSINESS
+                    </Link>
+                    <Link href="#" onClick={() => setMenuOpen(false)} className="text-gray-800 hover:text-gray-600">
+                        OUR TEAM
+                    </Link>
+                    <Link href="#" onClick={() => setMenuOpen(false)} className="text-gray-800 hover:text-gray-600">
+                        NEWS
+                    </Link>
+                    <Link href="#" onClick={() => setMenuOpen(false)} className="text-gray-800 hover:text-gray-600">
+                        JOBS
+                    </Link>
+                    <Link href="#" onClick={() => setMenuOpen(false)} className="text-blue-600 hover:text-blue-700">
+                        <LinkedinIcon className="w-6 h-6" />
+                    </Link>
+                </div>
+            </div>
+        </>
+    );
 }
 
-export default Navbar
+export default Navbar;
