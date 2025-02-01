@@ -3,12 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 function Page() {
-    // Create refs for the elements to animate
     const headingRef = useRef(null);
     const textRef = useRef(null);
 
     useEffect(() => {
-        // Animate the heading: fade in from the top
         gsap.from(headingRef.current, {
             duration: 1,
             opacity: 0,
@@ -16,7 +14,6 @@ function Page() {
             ease: "power1.out"
         });
 
-        // Animate the text: fade in from the bottom with a delay
         gsap.from(textRef.current, {
             duration: 1,
             opacity: 0,

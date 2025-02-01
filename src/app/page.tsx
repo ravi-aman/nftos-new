@@ -77,7 +77,6 @@ const Page: FC = () => {
           Innovative Web3 solutions for a decentralized future.
         </h1>
 
-        {/* Mailing List Section */}
         <div
           ref={mailingListRef}
           className="w-full max-w-2xl border-2 rounded-3xl p-8"
